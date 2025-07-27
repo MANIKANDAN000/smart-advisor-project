@@ -1,0 +1,4 @@
+OpenWeatherMap : https://home.openweathermap.org/api_keys
+Google Cloud Platform (GCP) Console : https://console.cloud.google.com/auth/clients/create?inv=1&invt=AbzMng&project=smartweatheractivityadvisor
+DJANGO_SECRET_KEY : https://djecrety.ir/
+Eventbrite API Key : https://www.eventbrite.com/platform/api-keys/
