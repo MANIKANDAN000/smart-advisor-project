@@ -1,0 +1,508 @@
+/* Cyber Luxury Smart Advisor CSS */
+:root {
+    --neon-blue: #00f2ff;
+    --neon-pink: #ff00f2;
+    --neon-purple: #9d00ff;
+    --matrix-green: #00ff41;
+    --cyber-dark: #0a0a12;
+    --cyber-gray: #1a1a2e;
+    --cyber-light: #e6e6e6;
+    --cyber-accent: #ff2a6d;
+    --glow: 0 0 10px rgba(0, 242, 255, 0.7);
+    --transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --fast-transition: all 0.15s ease-out;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;500;600&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background-color: var(--cyber-dark);
+    color: var(--cyber-light);
+    line-height: 1.7;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* Cyber Header with Neon Glow */
+.main-header {
+    background-color: rgba(10, 10, 18, 0.9);
+    color: var(--neon-blue);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    position: relative;
+    border-bottom: 1px solid var(--neon-purple);
+    backdrop-filter: blur(5px);
+    z-index: 100;
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+}
+
+.main-header::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        var(--neon-pink), 
+        var(--neon-blue), 
+        var(--neon-pink), 
+        transparent);
+    box-shadow: var(--glow);
+}
+
+.main-header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin: 0;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+    position: relative;
+    display: inline-block;
+}
+
+.main-header h1::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 2px;
+    background: var(--neon-blue);
+    box-shadow: var(--glow);
+}
+
+/* Cyber Navigation with Holographic Effect */
+.main-nav {
+    background-color: rgba(26, 26, 46, 0.9);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem;
+    backdrop-filter: blur(5px);
+    position: relative;
+    border-bottom: 1px solid rgba(157, 0, 255, 0.3);
+}
+
+.main-nav::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        var(--neon-blue), 
+        transparent);
+}
+
+.nav-links {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.main-nav a {
+    color: var(--cyber-light);
+    padding: 1.2rem 1.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 1px;
+    position: relative;
+    transition: var(--fast-transition);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Rajdhani', sans-serif;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.main-nav a i {
+    font-size: 1.1rem;
+    color: var(--neon-blue);
+    transition: var(--fast-transition);
+}
+
+.main-nav a:hover {
+    color: var(--neon-blue);
+    text-shadow: 0 0 8px rgba(0, 242, 255, 0.7);
+}
+
+.main-nav a:hover i {
+    color: var(--neon-pink);
+    transform: scale(1.2);
+}
+
+.main-nav a::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--neon-blue);
+    transition: var(--fast-transition);
+}
+
+.main-nav a:hover::before {
+    width: 70%;
+}
+
+/* Cyber Container with Holographic UI */
+.container {
+    padding: 2.5rem;
+    max-width: 1300px;
+    margin: 2rem auto;
+    background-color: rgba(26, 26, 46, 0.7);
+    border-radius: 0;
+    border: 1px solid rgba(0, 242, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3),
+                inset 0 0 20px rgba(0, 242, 255, 0.1);
+}
+
+.container::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to bottom right,
+        rgba(0, 242, 255, 0) 0%,
+        rgba(0, 242, 255, 0.1) 50%,
+        rgba(0, 242, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    animation: shine 6s infinite linear;
+    pointer-events: none;
+}
+
+@keyframes shine {
+    from { transform: translateX(-100%) rotate(30deg); }
+    to { transform: translateX(100%) rotate(30deg); }
+}
+
+/* Cyber Cards with Neon Borders */
+.card {
+    background-color: rgba(10, 10, 18, 0.6);
+    border: 1px solid rgba(0, 242, 255, 0.3);
+    border-radius: 0;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.2),
+                inset 0 0 10px rgba(0, 242, 255, 0.1);
+    transform: translateY(-5px);
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        var(--neon-pink),
+        var(--neon-blue)
+    );
+    transition: var(--transition);
+}
+
+.card:hover::before {
+    width: 5px;
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.7);
+}
+
+.card h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 500;
+    color: var(--neon-blue);
+    font-size: 1.6rem;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 242, 255, 0.3);
+    letter-spacing: 1px;
+    position: relative;
+}
+
+.card h2::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100px;
+    height: 2px;
+    background: var(--neon-blue);
+    box-shadow: var(--glow);
+}
+
+/* Cyber Buttons with Holographic Effect */
+button, .button-link {
+    background: linear-gradient(
+        135deg,
+        rgba(0, 242, 255, 0.2) 0%,
+        rgba(157, 0, 255, 0.2) 100%
+    );
+    color: var(--neon-blue) !important;
+    padding: 0.8rem 1.8rem;
+    border: 1px solid var(--neon-blue);
+    border-radius: 0;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+}
+
+button::after, .button-link::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    transition: var(--transition);
+}
+
+button:hover, .button-link:hover {
+    background: linear-gradient(
+        135deg,
+        rgba(0, 242, 255, 0.3) 0%,
+        rgba(157, 0, 255, 0.3) 100%
+    );
+    color: white !important;
+    text-shadow: 0 0 8px rgba(0, 242, 255, 0.7);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+    transform: translateY(-3px);
+    border-color: var(--neon-pink);
+}
+
+button:hover::after, .button-link:hover::after {
+    left: 100%;
+}
+
+.button-link i, button i {
+    transition: var(--fast-transition);
+}
+
+.button-link:hover i, button:hover i {
+    color: var(--neon-pink);
+    transform: translateX(3px);
+}
+
+/* Cyber Form Elements */
+label {
+    display: block;
+    margin-bottom: 0.7rem;
+    font-weight: 600;
+    color: var(--neon-blue);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(0, 242, 255, 0.3);
+    border-radius: 0;
+    font-size: 1rem;
+    background-color: rgba(10, 10, 18, 0.5);
+    color: var(--cyber-light);
+    transition: var(--fast-transition);
+    font-family: 'Rajdhani', sans-serif;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 10px rgba(255, 0, 242, 0.2);
+    background-color: rgba(26, 26, 46, 0.7);
+}
+
+/* Cyber Footer with Grid Effect */
+.main-footer {
+    text-align: center;
+    padding: 2rem;
+    background-color: rgba(10, 10, 18, 0.9);
+    color: var(--neon-blue);
+    margin-top: auto;
+    position: relative;
+    border-top: 1px solid var(--neon-purple);
+    backdrop-filter: blur(5px);
+}
+
+.main-footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        var(--neon-blue), 
+        transparent);
+    box-shadow: var(--glow);
+}
+
+.main-footer p {
+    margin: 0;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.social-links a {
+    color: var(--cyber-light);
+    font-size: 1.2rem;
+    transition: var(--fast-transition);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    border: 1px solid rgba(0, 242, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.social-links a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 242, 255, 0.1),
+        transparent
+    );
+    transition: var(--transition);
+}
+
+.social-links a:hover {
+    color: var(--neon-blue);
+    border-color: var(--neon-blue);
+    text-shadow: 0 0 8px rgba(0, 242, 255, 0.7);
+    transform: translateY(-3px);
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+}
+
+.social-links a:hover::before {
+    left: 100%;
+}
+
+/* Cyber Animations */
+@keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+    }
+    20%, 22%, 24%, 55% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes scanline {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(100%); }
+}
+
+.container, .card {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-nav {
+        flex-direction: column;
+        padding: 0;
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .main-nav a {
+        width: 100%;
+        padding: 1rem;
+        justify-content: center;
+    }
+    
+    .container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .card {
+        padding: 1.5rem;
+    }
+    
+    .main-header h1 {
+        font-size: 1.8rem;
+    }
+}

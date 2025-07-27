@@ -1,0 +1,54 @@
+{% extends "advisor_app/base.html" %}
+
+{% block title %}Your Profile - {{ block.super }}{% endblock %}
+
+{% block content %}
+<h1>Your Profile</h1>
+
+<div class="card">
+    <h2>Update Location</h2>
+    <form method="post" action="{% url 'profile' %}">
+        {% csrf_token %}
+        <div>
+            <label for="id_location">Your Location (e.g., "London,UK", "Paris,FR", "90210,US"):</label>
+            <input type="text" id="id_location" name="location" value="{{ user_profile.location|default_if_none:'' }}" required>
+            {% if form.location.errors %}
+                <ul class="errorlist">{% for error in form.location.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+        </div>
+        <button type="submit" class="button-link" style="margin-top:10px;">Save Location</button>
+    </form>
+    {% if user_profile.location %}
+        <p style="margin-top:15px;">Current location: <strong>{{ user_profile.location }}</strong></p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Connected Services</h2>
+    <div class="service-status">
+        <strong>Google Calendar:</strong>
+        {% with google_creds=user_profile.get_google_credentials %}
+            {% if google_creds and google_creds.valid %}
+                <span class="status-connected">Connected</span>
+                (<a href="{% url 'google_calendar_revoke' %}" class="button-link warning inline-button">Disconnect</a>)
+            {% elif google_creds and not google_creds.valid and google_creds.refresh_token %}
+                <span class="status-issue">Token Expired</span>
+                (<a href="{% url 'google_calendar_init' %}" class="button-link inline-button">Re-authenticate</a>)
+            {% else %}
+                <span class="status-disconnected">Not Connected</span>
+                (<a href="{% url 'google_calendar_init' %}" class="button-link inline-button">Connect</a>)
+            {% endif %}
+        {% endwith %}
+    </div>
+    <!-- Add other services here if any in the future -->
+</div>
+
+<style>
+    .service-status { margin-bottom: 10px; }
+    .service-status strong { min-width: 150px; display: inline-block;}
+    .status-connected { color: green; font-weight: bold; }
+    .status-disconnected { color: #777; }
+    .status-issue { color: orange; font-weight: bold; }
+    .inline-button { padding: 5px 10px; font-size: 0.9em; margin-left: 10px; }
+</style>
+{% endblock %}

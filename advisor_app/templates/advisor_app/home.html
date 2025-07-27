@@ -1,0 +1,128 @@
+{% extends "advisor_app/base.html" %}
+{% load static %} {# Good practice to have it, though may not be used directly in this specific file if base.html handles all static #}
+
+{% block title %}Dashboard - {{ block.super }}{% endblock %}
+
+{% block content %}
+    <h1>Welcome back, {{ user.username|capfirst }}!</h1>
+
+    {% if user.is_authenticated %}
+        <p>Here's your personalized information. You can update your preferences in your <a href="{% url 'profile' %}">profile</a>.</p>
+
+        <!-- Weather Section -->
+        <div class="card weather-card">
+            <h2><a href="{% url 'profile' %}" style="text-decoration:none; color: inherit;">Today's Weather</a></h2>
+            {% if user_profile.location %}
+                <p>Forecast for: <strong>{{ user_profile.location }}</strong> (<a href="{% url 'profile' %}" class="text-link">Change</a>)</p>
+                {% if weather_data %}
+                    {% if weather_data.error %}
+                        <p class="error-message">{{ weather_data.error }}</p>
+                    {% elif weather_data.main and weather_data.weather %}
+                        <p><strong>Temperature:</strong> {{ weather_data.main.temp|floatformat:1 }}°C
+                           (Feels like: {{ weather_data.main.feels_like|floatformat:1 }}°C)</p>
+                        <p><strong>Condition:</strong> {{ weather_data.weather.0.description|capfirst }}
+                           {% if weather_data.weather.0.icon %}
+                           <img src="http://openweathermap.org/img/wn/{{ weather_data.weather.0.icon }}.png" alt="{{ weather_data.weather.0.description }}" style="vertical-align: middle; width:30px; height:30px;">
+                           {% endif %}
+                        </p>
+                        <p><strong>Humidity:</strong> {{ weather_data.main.humidity }}%</p>
+                        <p><strong>Wind:</strong> {{ weather_data.wind.speed|floatformat:1 }} m/s</p>
+                    {% else %}
+                         <p class="warning-message">Weather details are currently unavailable or in an unexpected format.</p>
+                    {% endif %}
+                {% else %}
+                    <p class="info-message">Loading weather data or no data available. Please ensure your location is set correctly in your profile.</p>
+                {% endif %}
+            {% else %}
+                <p>Please <a href="{% url 'profile' %}" class="button-link secondary">Set Your Location</a> in your profile to see weather information.</p>
+            {% endif %}
+        </div>
+
+        <!-- Google Calendar Section -->
+        <div class="card calendar-card">
+            <h2>Google Calendar</h2>
+            {% if google_auth_url %} {# User needs to authenticate/re-authenticate #}
+                <p>Connect your Google Calendar to see upcoming events.</p>
+                <p><a href="{{ google_auth_url }}" class="button-link">Connect to Google Calendar</a></p>
+            {% elif user_profile.get_google_credentials %} {# User has (or had) credentials stored #}
+                <p><a href="{% url 'google_calendar_revoke' %}" class="button-link warning">Disconnect Google Calendar</a></p>
+                {% if calendar_data %}
+                    {% if calendar_data.error %}
+                        <p class="error-message">{{ calendar_data.error }}</p>
+                        {% if calendar_data.needs_reauth %}
+                            <p><a href="{% url 'google_calendar_init' %}" class="button-link">Re-authenticate with Google Calendar</a></p>
+                        {% endif %}
+                    {% elif calendar_data.events %}
+                        <h3>Upcoming Events:</h3>
+                        <ul>
+                            {% for event in calendar_data.events|slice:":5" %} {# Show first 5 events #}
+                                <li>
+                                    <strong>{{ event.summary }}</strong><br>
+                                    <small>
+                                    {% if event.start.dateTime %}
+                                        {{ event.start.dateTime|date:"D, M j, Y, P" }}{% if event.end.dateTime %} - {{ event.end.dateTime|date:"P" }}{% endif %}
+                                    {% elif event.start.date %}
+                                        {{ event.start.date|date:"D, M j, Y" }} (All-day)
+                                    {% else %}
+                                        Date not specified
+                                    {% endif %}
+                                    {% if event.location %} | {{ event.location }}{% endif %}
+                                    </small>
+                                </li>
+                            {% empty %}
+                                <li>No upcoming events found in your primary calendar.</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="info-message">No Google Calendar events to display, or still loading.</p>
+                    {% endif %}
+                {% else %}
+                     <p class="info-message">Loading Google Calendar data...</p>
+                {% endif %}
+            {% else %} {# Fallback if no credentials and no auth_url (should not happen if logic is correct) #}
+                 <p>Could not determine Google Calendar status. <a href="{% url 'google_calendar_init' %}" class="button-link">Try Connecting</a></p>
+            {% endif %}
+        </div>
+
+        <!-- Eventbrite Section -->
+        <div class="card eventbrite-card">
+            <h2>Local Events (Eventbrite)</h2>
+            {% if user_profile.location %}
+                {% if eventbrite_data %}
+                    {% if eventbrite_data.error %}
+                        {# This will display the helpful error message from your service #}
+                        <p class="error-message">{{ eventbrite_data.error }}</p>
+                    {% elif eventbrite_data.events %}
+                        <h3>Events near {{ user_profile.location }}:</h3>
+                        <ul>
+                            {% for event in eventbrite_data.events|slice:":5" %} {# Show first 5 events #}
+                                <li>
+                                    <a href="{{ event.url }}" target="_blank" rel="noopener noreferrer">{{ event.name.text|default:"Unnamed Event" }}</a>
+                                    {% if event.start.local %}
+                                    <br><small>Date: {{ event.start.local|date:"D, M j, Y, P T" }}</small>
+                                    {% endif %}
+                                    {% if event.venue.name %}
+                                        <br><small>Venue: {{ event.venue.name }}{% if event.venue.address.localized_address_display %} - {{ event.venue.address.localized_address_display }}{% endif %}</small>
+                                    {% elif event.venue.address.localized_address_display %}
+                                      <br><small>Venue: {{ event.venue.address.localized_address_display }}</small>
+                                    {% endif %}
+                                </li>
+                            {% empty %}
+                                <li>No events found on Eventbrite for your current location ({{ user_profile.location }}).</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="info-message">No Eventbrite events to display for {{ user_profile.location }}. Eventbrite might not have listings for this specific area, or there was an issue fetching data.</p>
+                    {% endif %}
+                {% else %}
+                    <p class="info-message">Loading Eventbrite events... If this persists, there might be an issue with the service.</p>
+                {% endif %}
+            {% else %}
+                 <p>Please <a href="{% url 'profile' %}" class="button-link secondary">Set Your Location</a> in your profile to see local events from Eventbrite.</p>
+            {% endif %}
+        </div>
+
+    {% else %} {# User is not authenticated #}
+        <p>Welcome! Please <a href="{% url 'login' %}">login</a> to access your personalized advisor.</p>
+    {% endif %}
+{% endblock %}
